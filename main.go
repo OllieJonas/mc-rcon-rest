@@ -4,20 +4,24 @@ import (
 	"flag"
 	"net/http"
 
+	"rest-rcon/service"
+
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
 )
 
 var (
 	address string
-	port string
-	mode string
+	port    string
+	mode    string
 
 	PossibleModes = map[string]bool{
-		"debug": true,
-		"test": true,
+		"debug":   true,
+		"test":    true,
 		"release": true,
 	}
+
+	Service = service.NewDispatchService()
 )
 
 func init() {
@@ -37,23 +41,27 @@ func main() {
 	router := gin.Default()
 
 	// paths
-	router.GET("/health", healthCheck)
 
-	err := router.Run(address + ":" + port)
+	// health check
+	router.GET("/health", func(c *gin.Context) {
+		c.IndentedJSON(http.StatusOK, gin.H{"status": "OK"})
+	})
+
+	router.POST("/dispatch", onDispatch)
+
+	err := router.Run(":" + port)
 
 	if err != nil {
 		logrus.Fatalf("Unable to listen and serve ", err)
 	}
 }
 
+func onDispatch(c *gin.Context) {
+	var request service.DispatchRequest
 
-func healthCheck(ctx *gin.Context) {
-
-	response := struct {
-		Status string `json:"status"`
-	}{}
-
-	response.Status = "OK"
-
-	ctx.IndentedJSON(http.StatusOK, response)
+	if err := c.BindJSON(&request); err != nil {
+		c.IndentedJSON(http.StatusBadRequest, gin.H{"response": "Malformed JSON!"})
+	} else {
+		c.IndentedJSON(http.StatusOK, Service.DispatchCommands(&request))
+	}
 }
