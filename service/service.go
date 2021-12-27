@@ -1,12 +1,11 @@
 package service
 
 import (
+	"github.com/ReneKroon/ttlcache/v2"
 	"github.com/sirupsen/logrus"
+	"github.com/willroberts/minecraft-client"
 	"net/http"
 	"time"
-
-	"github.com/ReneKroon/ttlcache/v2"
-	"github.com/willroberts/minecraft-client"
 )
 
 type DispatchService struct {
@@ -25,11 +24,11 @@ type DispatchResponse struct {
 	Response interface{} `json:"response"`
 }
 
-func NewDispatchService() *DispatchService {
+func NewDispatchService(ttl time.Duration) *DispatchService {
 
 	newCache := func() *ttlcache.Cache {
 		expirationCallback := func(_ string, _ ttlcache.EvictionReason, iClient interface{}) {
-			client, ok := iClient.(minecraft.Client)
+			client, ok := iClient.(*minecraft.Client)
 
 			if !ok {
 				logrus.Fatal("Unable to cast client in cache to client! (Shouldn't see this)")
@@ -39,14 +38,15 @@ func NewDispatchService() *DispatchService {
 		}
 
 		cache := ttlcache.NewCache()
-		_ = cache.SetTTL(2 * time.Minute)
+		_ = cache.SetTTL(ttl)
 		cache.SetExpirationReasonCallback(expirationCallback)
-		cache.SetCacheSizeLimit(64)
+		cache.SetCacheSizeLimit(0)
 
 		return cache
 	}
 
 	cache := newCache()
+
 	return &DispatchService{
 		Cache: cache,
 	}
@@ -62,7 +62,7 @@ func (s *DispatchService) DispatchCommands(request *DispatchRequest) DispatchRes
 
 	addressport := request.GetAddressPort()
 
-	// item not in cache
+	// item in cache
 	if iClient, exists := s.Cache.Get(addressport); exists == nil {
 		cli, ok := iClient.(minecraft.Client)
 

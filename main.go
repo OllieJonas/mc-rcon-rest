@@ -3,8 +3,8 @@ package main
 import (
 	"flag"
 	"net/http"
-
 	"rest-rcon/service"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
@@ -14,6 +14,9 @@ var (
 	address string
 	port    string
 	mode    string
+	ttlStr  string
+
+	ttl time.Duration
 
 	PossibleModes = map[string]bool{
 		"debug":   true,
@@ -21,18 +24,28 @@ var (
 		"release": true,
 	}
 
-	Service = service.NewDispatchService()
+	Service *service.DispatchService
 )
 
 func init() {
 	flag.StringVar(&address, "address", "localhost", "Address to listen on")
 	flag.StringVar(&port, "port", "8080", "Port to listen on")
 	flag.StringVar(&mode, "mode", "release", "either debug, release or test")
+	flag.StringVar(&ttlStr, "ttl", "2m", "Time to live. See https://pkg.go.dev/time#ParseDuration for format")
 	flag.Parse()
 
 	if !PossibleModes[mode] {
 		logrus.Fatal("Mode must be either debug, release or test!")
 	}
+
+	var err error
+	ttl, err = time.ParseDuration(ttlStr)
+
+	if err != nil {
+		logrus.Fatal("Malformed ttl! See https://pkg.go.dev/time#ParseDuration for more format!", err)
+	}
+
+	Service = service.NewDispatchService(ttl)
 }
 
 func main() {
