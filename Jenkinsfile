@@ -28,9 +28,10 @@ pipeline {
                     sh '''
                         [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
                         ssh-keyscan -t rsa,dsa ${DEPLOY_SERVER_URL} >> ~/.ssh/known_hosts
-                        ssh root@${DEPLOY_SERVER_URL}
+                        cat << 'EOT' | ssh ${DEPLOY_SERVER_USER}@${DEPLOY_SERVER_URL} /bin/bash
+                        echo whoami
                         ls -l
-                        exit
+                        EOT
                     '''
                 }
             }
