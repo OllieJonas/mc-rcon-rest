@@ -10,7 +10,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo "Building ${env.BUILD_ID} on ${env.JENKINS_URL} as name {$env.BUILD_TAG}..."
+                echo "Building ${env.BUILD_TAG} on ${env.JENKINS_URL} ..."
                 sh "docker build -t ${env.BUILD_TAG} ."
             }
         }
@@ -21,7 +21,7 @@ pipeline {
                 DEPLOY_SERVER_USER = 'root'
             }
             steps {
-                echo "Deploying ${env.BUILD_ID} onto ${DEPLOY_SERVER_URL} ..."
+                echo "Deploying ${env.BUILD_TAG} onto ${DEPLOY_SERVER_URL} ..."
                 sh "docker save -o ${env.BUILD_TAG}.tar ${env.BUILD_TAG}:latest | gzip > ${env.BUILD_TAG}.tar.gz"
             }
         }
