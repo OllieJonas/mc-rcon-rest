@@ -65,7 +65,7 @@ func main() {
 	err := router.Run(":" + port)
 
 	if err != nil {
-		logrus.Fatalf("Unable to listen and serve ", err)
+		logrus.Fatal("Unable to listen and serve", err)
 	}
 }
 
