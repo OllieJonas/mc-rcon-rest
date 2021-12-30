@@ -22,7 +22,11 @@ pipeline {
 
                 sshagent(credentials: ['projects']) {
                     sh '''
+                        [ -d ~/.ssh ] || mkdir ~/.ssh && chmod 0700 ~/.ssh
+                        ssh-keyscan -t rsa,dsa projects.olliejonas.com >> ~/.ssh/known_hosts
+                        ssh root@projects.olliejonas.com
                         ls -l
+                        exit
                     '''
                 }
             }
