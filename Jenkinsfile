@@ -15,14 +15,6 @@ pipeline {
             }
         }
 
-        stage('Cleanup') {
-            steps {
-                echo "Performing cleanup..."
-                sh "docker image prune --force"
-            }
-
-        }
-
         stage('Deploy') {
             environment {
                 DEPLOY_SERVER_URL = 'projects.olliejonas.com'
@@ -30,6 +22,14 @@ pipeline {
             }
             steps {
                 echo "Deploying ${env.BUILD_ID} onto ${DEPLOY_SERVER_URL} ..."
+            }
+        }
+
+        stage('Cleanup') {
+            steps {
+                echo "Performing cleanup..."
+                sh "docker image prune --force"
+                sh "docker image rm {env.JENKINS_URL} --force"
             }
         }
     }
