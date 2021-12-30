@@ -10,7 +10,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo "Building ${env.BUILD_ID} on ${env.JENKINS_URL} ..."
+                echo "Building ${env.BUILD_ID} on ${env.JENKINS_URL} as name {$env.BUILD_TAG}..."
                 sh "docker build -t ${env.BUILD_TAG} ."
             }
         }
