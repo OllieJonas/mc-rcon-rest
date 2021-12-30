@@ -37,7 +37,7 @@ pipeline {
 
                         ssh -t -t ${env.DEPLOY_SERVER} << EOF
                         cd ${env.JOB_NAME}
-                        tar -xf ${env.BUILD_TAG}.tar.gz
+                        tar -xvzf ${env.BUILD_TAG}.tar.gz
 
                         exit
                         EOF
@@ -55,7 +55,7 @@ pipeline {
 
             // remove any zipped stuff
             sh "rm ${env.BUILD_TAG}.tar"
-            sh "rm ${env.BUILD_TAG}.tar.gz"
+            // sh "rm ${env.BUILD_TAG}.tar.gz"
         }
     }
 }
