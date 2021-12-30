@@ -1,5 +1,6 @@
 # Minecraft RCON Client REST API
 
+[![Build Status](https://ci.olliejonas.com/job/mc-rest-rcon/job/master/badge/icon)](https://ci.olliejonas.com/job/mc-rest-rcon/job/master/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 Simple REST API that allows for the dispatching of commands remotely using the Minecraft RCON protocol. 
