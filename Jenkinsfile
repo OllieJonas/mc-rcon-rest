@@ -11,7 +11,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo "Building ${env.BUILD_ID} on ${env.JENKINS_URL} ..."
-                sh "docker build -t ${env.JOB_NAME} ."
+                sh "docker build -t ${env.BUILD_TAG} ."
             }
         }
 
