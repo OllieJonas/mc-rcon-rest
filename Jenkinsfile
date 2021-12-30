@@ -29,7 +29,7 @@ pipeline {
             steps {
                 echo "Performing cleanup..."
                 sh "docker image prune --force"
-                sh "docker image rm {env.JENKINS_URL} --force"
+                // sh "docker image rm {env.JENKINS_URL} --force"
             }
         }
     }
