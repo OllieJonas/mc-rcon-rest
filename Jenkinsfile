@@ -22,14 +22,19 @@ pipeline {
             }
             steps {
                 echo "Deploying ${env.BUILD_ID} onto ${DEPLOY_SERVER_URL} ..."
+                sh "docker save -o ${env.BUILD_TAG}.tar ${env.BUILD_TAG}:latest | gzip > ${env.BUILD_TAG}.tar.gz"
             }
         }
 
         stage('Cleanup') {
             steps {
                 echo "Performing cleanup..."
-                sh "docker image prune --force"
-                // sh "docker image rm {env.JENKINS_URL} --force"
+                sh "docker image prune --force" // in case it created any dangling images
+                sh "docker image rm {env.JENKINS_URL} --force" // dont want the image left on the agent
+
+                // remove any zipped stuff
+                sh "rm ${env.BUILD_TAG}.tar"
+                sh "rm ${env.BUILD_TAG}.tar.gz"
             }
         }
     }
