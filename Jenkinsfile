@@ -9,8 +9,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo 'Building ${env.BUILD_ID} on ${env.JENKINS_URL} ...'
-                sh 'docker build -t ${env.JOB_NAME} .'
+                echo "Building ${env.BUILD_ID} on ${env.JENKINS_URL} ..."
+                sh "docker build -t ${env.JOB_NAME} ."
             }
         }
 
@@ -19,7 +19,7 @@ pipeline {
                 DEPLOY_SERVER_URL = 'projects.olliejonas.com'
             }
             steps {
-                echo 'Deploying ${env.BUILD_ID} onto ${DEPLOY_SERVER_URL} ...'
+                echo "Deploying ${env.BUILD_ID} onto ${DEPLOY_SERVER_URL} ..."
             }
         }
     }
