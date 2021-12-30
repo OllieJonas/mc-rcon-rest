@@ -20,7 +20,7 @@ pipeline {
                 echo "Deploying ${env.BUILD_TAG} onto ${DEPLOY_SERVER_URL} ..."
                 sh "docker save -o ${env.BUILD_TAG}.tar ${env.BUILD_TAG}:latest | gzip > ${env.BUILD_TAG}.tar.gz"
 
-                sshagent(credentials: ['root@projects.olliejonas.com']) {
+                sshagent(credentials: ['projects']) {
                     sh '''
                         ls -l
                     '''
