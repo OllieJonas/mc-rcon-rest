@@ -33,7 +33,7 @@ pipeline {
                         ssh-keyscan -t rsa,dsa ${DEPLOY_SERVER_URL} >> ~/.ssh/known_hosts
 
                         ssh -t -t ${env.DEPLOY_SERVER} \"mkdir -p ${env.JOB_NAME}\"
-                        scp ${env.BUILD_TAG}.tar.gz ${env.DEPLOY_SERVER}:/${env.JOB_NAME}
+                        scp ${env.BUILD_TAG}.tar.gz ${env.DEPLOY_SERVER}:~/${env.JOB_NAME}
 
                         ssh -t -t ${env.DEPLOY_SERVER} << EOF
                         cd ${env.JOB_NAME}
