@@ -30,7 +30,7 @@ pipeline {
             steps {
                 echo "Performing cleanup..."
                 sh "docker image prune --force" // in case it created any dangling images
-                sh "docker image rm {env.BUILD_TAG} --force" // dont want the image left on the agent
+                sh "docker image rm ${env.BUILD_TAG} --force" // dont want the image left on the agent
 
                 // remove any zipped stuff
                 sh "rm ${env.BUILD_TAG}.tar"
