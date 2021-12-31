@@ -4,8 +4,8 @@ pipeline {
         // stuff that should be changed for each project goes here
 
         PROJECT_NAME = 'mc-rest-rcon'
-        env.DOCKER_RUN_ARGUMENTS = "--expose 8080 --publish 8080:8080"
-        env.PROGRAM_ARGUMENTS = "--address http://projects.olliejonas.com --port 8080"
+        DOCKER_RUN_ARGUMENTS = "--expose 8080 --publish 8080:8080"
+        PROGRAM_ARGUMENTS = "--address http://projects.olliejonas.com --port 8080"
     }
 
     stages {
