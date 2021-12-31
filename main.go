@@ -11,10 +11,9 @@ import (
 )
 
 var (
-	address string
-	port    string
-	mode    string
-	ttlStr  string
+	port   string
+	mode   string
+	ttlStr string
 
 	ttl time.Duration
 
@@ -28,7 +27,6 @@ var (
 )
 
 func init() {
-	flag.StringVar(&address, "address", "localhost", "Address to listen on")
 	flag.StringVar(&port, "port", "8080", "Port to listen on")
 	flag.StringVar(&mode, "mode", "release", "either debug, release or test")
 	flag.StringVar(&ttlStr, "ttl", "2m", "Time to live. See https://pkg.go.dev/time#ParseDuration for format")
