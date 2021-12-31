@@ -11,7 +11,7 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                echo "Running tests for ${env.BUILD_ID} on ${env.JENKINS_URL} ..."
+                echo "Running tests for ${env.PROJECT_NAME} on ${env.JENKINS_URL} ..."
                 sh 'go test'
             }
         }
@@ -48,7 +48,9 @@ pipeline {
 
                         docker stop ${env.PROJECT_NAME}
                         docker image rm ${env.PROJECT_NAME}
+
                         docker load --input ${env.PROJECT_NAME}.tar
+                        rm ${env.PROJECT_NAME}.tar
 
                         docker run -d --name=${env.PROJECT_NAME} ${env.DOCKER_RUN_ARGUMENTS} ${env.PROJECT_NAME} ${env.PROGRAM_ARGUMENTS}
                         exit
@@ -63,10 +65,10 @@ pipeline {
         always {
             echo "Performing cleanup..."
             sh "docker image prune --force" // in case it created any dangling images
-            sh "docker image rm ${env.BUILD_TAG} --force" // dont want the image left on the agent
+            sh "docker image rm ${env.PROJECT_NAME} --force" // dont want the image left on the agent
 
             // remove any zipped stuff
-            sh "rm ${env.BUILD_TAG}.tar"
+            sh "rm ${env.PROJECT_NAME}.tar"
             // sh "rm ${env.BUILD_TAG}.tar.gz"
         }
     }
