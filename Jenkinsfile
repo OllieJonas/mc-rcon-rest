@@ -51,7 +51,7 @@ pipeline {
                         cd ${env.JOB_NAME}
 
                         docker stop ${env.PROJECT_NAME}
-                        docker container prune
+                        docker container prune --force
                         docker image rm ${env.PROJECT_NAME}
 
                         docker load --input ${env.PROJECT_NAME}.tar
