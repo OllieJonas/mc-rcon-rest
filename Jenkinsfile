@@ -1,5 +1,13 @@
 pipeline {
     agent any
+    environment {
+        // stuff that should be changed for each project goes here
+
+        PROJECT_NAME = 'mc-rest-rcon'
+        env.DOCKER_RUN_ARGUMENTS = "--expose 8080 --publish 8080:8080"
+        env.PROGRAM_ARGUMENTS = "--address http://projects.olliejonas.com --port 8080"
+    }
+
     stages {
         stage('Test') {
             steps {
@@ -10,8 +18,8 @@ pipeline {
 
         stage('Build') {
             steps {
-                echo "Building ${env.BUILD_TAG} on ${env.JENKINS_URL} ..."
-                sh "docker build -t ${env.BUILD_TAG} ."
+                echo "Building ${env.PROJECT_NAME} on ${env.JENKINS_URL} ..."
+                sh "docker build -t ${env.PROJECT_NAME} ."
             }
         }
 
@@ -24,8 +32,8 @@ pipeline {
                 script {
                     env.DEPLOY_SERVER = "${env.DEPLOY_SERVER_USER}@${env.DEPLOY_SERVER_URL}"
                 }
-                echo "Deploying ${env.BUILD_TAG} onto ${env.DEPLOY_SERVER_URL} ..."
-                sh "docker save -o ${env.BUILD_TAG}.tar ${env.BUILD_TAG}:latest | gzip > ${env.BUILD_TAG}.tar.gz"
+                echo "Deploying ${env.PROJECT_NAME} onto ${env.DEPLOY_SERVER_URL} ..."
+                sh "docker save -o ${env.PROJECT_NAME}.tar ${env.PROJECT_NAME}:latest"
 
                 sshagent(credentials: ['projects']) {
                     sh """
@@ -33,12 +41,16 @@ pipeline {
                         ssh-keyscan -t rsa,dsa ${DEPLOY_SERVER_URL} >> ~/.ssh/known_hosts
 
                         ssh -t -t ${env.DEPLOY_SERVER} \"mkdir -p ${env.JOB_NAME}\"
-                        scp ${env.BUILD_TAG}.tar.gz ${env.DEPLOY_SERVER}:~/${env.JOB_NAME}
+                        scp ${env.PROJECT_NAME}.tar ${env.DEPLOY_SERVER}:~/${env.JOB_NAME}
 
                         ssh -t -t ${env.DEPLOY_SERVER} << EOF
                         cd ${env.JOB_NAME}
-                        tar -xvzf ${env.BUILD_TAG}.tar.gz
 
+                        docker stop ${env.PROJECT_NAME}
+                        docker image rm ${env.PROJECT_NAME}
+                        docker load --input ${env.PROJECT_NAME}.tar
+
+                        docker run -d --name=${env.PROJECT_NAME} ${env.DOCKER_RUN_ARGUMENTS} ${env.PROJECT_NAME} ${env.PROGRAM_ARGUMENTS}
                         exit
                         EOF
                     """

@@ -20,4 +20,4 @@ COPY --from=builder /app/rest-rcon /app/
 ENTRYPOINT ["/app/rest-rcon"]
 
 # docker build -t rest-rcon .
-# docker run --publish 8080:8080 rest-rcon [args]
+# docker run --name=rest-rcon --expose 8080 --publish 8080:8080 rest-rcon [args]
