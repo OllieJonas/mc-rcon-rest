@@ -6,7 +6,8 @@ pipeline {
         PROJECT_NAME = 'mc-rest-rcon'
 
         // arguments given to docker run
-        DOCKER_RUN_ARGUMENTS = "--expose 8085 --publish 8085:8085"
+        // dont want to expose port - let nginx handle it
+        DOCKER_RUN_ARGUMENTS = "--publish 8085:8085"
 
         // arguments given to the program
         PROGRAM_ARGUMENTS = "--address http://projects.olliejonas.com --port 8085"
