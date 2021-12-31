@@ -9,7 +9,7 @@ Simple REST API that allows for the dispatching of commands remotely using the M
 ## Installation
 ## Base URL
 
-https://rcon.olliejonas.com/api/v1
+https://projects.olliejonas.com/rcon/api/v1/
 
 ## Routes
 
