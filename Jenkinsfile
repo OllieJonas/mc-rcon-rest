@@ -4,7 +4,11 @@ pipeline {
         // stuff that should be changed for each project goes here
 
         PROJECT_NAME = 'mc-rest-rcon'
+
+        // arguments given to docker run
         DOCKER_RUN_ARGUMENTS = "--expose 8080 --publish 8080:8080"
+
+        // arguments given to the program
         PROGRAM_ARGUMENTS = "--address http://projects.olliejonas.com --port 8080"
     }
 
@@ -47,6 +51,7 @@ pipeline {
                         cd ${env.JOB_NAME}
 
                         docker stop ${env.PROJECT_NAME}
+                        docker container prune
                         docker image rm ${env.PROJECT_NAME}
 
                         docker load --input ${env.PROJECT_NAME}.tar
