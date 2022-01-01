@@ -10,7 +10,7 @@ pipeline {
         DOCKER_RUN_ARGUMENTS = "--publish 8085:8085"
 
         // arguments given to the program
-        PROGRAM_ARGUMENTS = "--address http://projects.olliejonas.com --port 8085"
+        PROGRAM_ARGUMENTS = "--port 8085"
     }
 
     stages {
