@@ -52,7 +52,7 @@ func main() {
 	router := gin.Default()
 
 	router.NoRoute(func(c *gin.Context) {
-		c.IndentedJSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Unknown route " + c.FullPath()})
+		c.IndentedJSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Unknown route " + c.Request.URL.Path})
 	})
 
 	// health check
