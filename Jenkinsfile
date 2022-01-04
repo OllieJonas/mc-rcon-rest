@@ -7,7 +7,7 @@ pipeline {
 
         // arguments given to docker run
         // dont want to publish port - let nginx handle it
-        DOCKER_RUN_ARGUMENTS = "--expose 8085 --net=host"
+        DOCKER_RUN_ARGUMENTS = "--expose 8085"
 
         // arguments given to the program
         PROGRAM_ARGUMENTS = "--port 8085"
@@ -51,7 +51,7 @@ pipeline {
                         ssh -t -t ${env.DEPLOY_SERVER} << EOF
                         cd ${env.JOB_NAME}
 
-                        docker stop ${env.PROJECT_NAME}
+                        docker kill ${env.PROJECT_NAME}
                         docker container prune --force
                         docker image rm ${env.PROJECT_NAME}
 
