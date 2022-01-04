@@ -7,7 +7,7 @@ pipeline {
 
         // arguments given to docker run
         // dont want to expose port - let nginx handle it
-        DOCKER_RUN_ARGUMENTS = "--publish 8085:8085"
+        DOCKER_RUN_ARGUMENTS = "--expose 8085"
 
         // arguments given to the program
         PROGRAM_ARGUMENTS = "--port 8085"
