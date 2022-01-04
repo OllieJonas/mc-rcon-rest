@@ -51,7 +51,9 @@ func main() {
 	gin.SetMode(mode)
 	router := gin.Default()
 
-	// paths
+	router.NoRoute(func(c *gin.Context) {
+		c.IndentedJSON(404, gin.H{"code": "PAGE_NOT_FOUND", "message": "Unknown route " + c.FullPath()})
+	})
 
 	// health check
 	router.GET("/health", func(c *gin.Context) {
