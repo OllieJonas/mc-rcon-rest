@@ -30,7 +30,7 @@ pipeline {
 
         stage('Deploy') {
             environment {
-                DEPLOY_SERVER_URL = "projects.olliejonas.com"
+                DEPLOY_SERVER_URL = "olliejonas.com"
                 DEPLOY_SERVER_USER = "root"
             }
             steps {
