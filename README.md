@@ -5,12 +5,6 @@
 
 Simple REST API that allows for the dispatching of commands remotely using the Minecraft RCON protocol. 
 
-
-## Installation
-## Base URL
-
-https://olliejonas.com/rcon/api/v1/
-
 ## Routes
 
 ### /health
